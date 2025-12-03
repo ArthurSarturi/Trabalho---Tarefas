@@ -1,105 +1,212 @@
 <!DOCTYPE html>
+<html>
 
-    <head> 
+<head>
 
-        <title> Tarefas </title>
+    <title>Tarefas</title>
 
-        <style>
-            .inputField {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
+    <style>
 
-                width: 400px;
-            }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Georgia", serif;
+            background: #f4efe6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 40px;
+            color: #4b3e29;
+        }
 
-        </style>
+        h2 {
+            margin-bottom: 10px;
+            color: #4b3e29;
+        }
 
-    </head>
+        .box {
+            width: 600px;
+            background: #fffaf2;
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #e2d5bd;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.10);
+            margin-bottom: 25px;
+        }
 
-    <body> 
-        
-        <div class="mainContainer"> 
-            <div class="inputField">
-                
-                <label for="prioridade"> PRIORIDADE: </label>
-                <input id="prioridade"> </input>
-                
-                <label for="descricao"> DESCRIÇÃO: </label>
-                <input id="descricao"> </input>
-                
-                <label for="local"> LOCAL: </label>
-                <input id="local"> </input>
-                
-                <label for="recursosNecessarios"> RECURSOS NECESSARIOS: </label>
-                <input id="recursosNecessarios"> </input>
-                
-                <label for="dataLimite"> DATA LIMITE: </label>
-                <input type="date" id="dataLimite"> </input>
-                
-                <label for="matricula"> MATRICULA: </label>
-                <input type="number" id="matricula"> </input>
+        .inputField {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
 
-                <button type="button" onclick="salvar()"> SALVAR </button>
+        label {
+            font-weight: bold;
+            color: #5b4b36;
+        }
 
-            </div>
+        input, select {
+            padding: 10px;
+            border: 1px solid #c8b79f;
+            border-radius: 6px;
+            background: #fffcf5;
+            font-size: 14px;
+        }
 
-        </div>    
-            
-        <div class="Lista" id="Lista"> 
-            
+        button {
+            margin-top: 10px;
+            padding: 12px;
+            font-size: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #d6c3a3;
+            color: #4b3e29;
+            font-weight: bold;
+            border: none;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #c5b08f;
+        }
+
+        .tarefa {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #d0c1a7;
+            margin-bottom: 12px;
+            background: #fffdf7;
+        }
+
+        .urgente {
+            color: red;
+            font-weight: bold;
+            border-color: red;
+        }
+
+        .vazio {
+            color: #7a6a53;
+            text-align: center;
+            font-style: italic;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h2>Cadastro de Tarefas</h2>
+
+    <div class="box">
+        <div class="inputField">
+
+            <label>PRIORIDADE:</label>
+            <select id="prioridade">
+                <option value="">Selecione</option>
+                <option value="Baixa">Baixa</option>
+                <option value="Normal">Normal</option>
+                <option value="Urgente">Urgente</option>
+            </select>
+
+            <label>DESCRIÇÃO:</label>
+            <input id="descricao">
+
+            <label>LOCAL:</label>
+            <input id="local">
+
+            <label>RECURSOS NECESSÁRIOS:</label>
+            <input id="recursosNecessarios">
+
+            <label>DATA LIMITE:</label>
+            <input type="datetime-local" id="dataLimite">
+
+            <label>MATRÍCULA:</label>
+            <input type="number" id="matricula">
+
+            <button onclick="salvar()">SALVAR</button>
+
         </div>
+    </div>
 
-        <script> 
-            const urlBase = "http://26.37.2.36:5000/";
+    <h2>Lista de Tarefas</h2>
 
-            async function atualizar() {
-                const response = await fetch(urlBase);
-                const dados = await response.json();
-                            
-                const tabela = document.getElementById("Lista");
-                tabela.innerHTML = "";
+    <div id="Lista" class="box"></div>
 
-                dados.forEach(element => {
-                    const div = document.createElement("div");
-                    div.innerHTML = `
-                        <p><b>Prioridade:</b> ${element.prioridade}</p>
-                        <p><b>Descrição:</b> ${element.descricao}</p>
-                        <p><b>Local:</b> ${element.local}</p>
-                        <p><b>Recursos:</b> ${element.recursosNecessarios}</p>
-                        <p><b>Data Limite:</b> ${element.dataLimite}</p>
-                        <p><b>Matrícula:</b> ${element.matricula}</p>
-                        <hr>
-                    `;
-                    tabela.appendChild(div);
-                });
+    <script>
+
+        const urlBase = "http://192.168.1.102:5000/";
+
+        async function atualizar() {
+            const lista = document.getElementById("Lista");
+            lista.innerHTML = "Carregando...";
+
+            const response = await fetch(urlBase);
+            const dados = await response.json();
+
+            lista.innerHTML = "";
+
+            if (!Array.isArray(dados) || dados.length === 0) {
+                lista.innerHTML = `<p class="vazio">Nenhuma tarefa cadastrada</p>`;
+                return;
             }
 
-            async function salvar() {
-                const dadosExemplo = {
-                    prioridade: document.getElementById("prioridade").value,
-                    descricao: document.getElementById("descricao").value,
-                    local: parseInt(document.getElementById("local").value),
-                    recursosNecessarios: document.getElementById("recursosNecessarios").value.split(","), 
-                    dataLimite: document.getElementById("dataLimite").value,
-                    matricula: parseInt(document.getElementById("matricula").value)
-                };
+            dados.forEach(tarefa => {
+                const div = document.createElement("div");
 
-                console.log(dadosExemplo);
+                div.className = "tarefa";
+                if (tarefa.prioridade === "Urgente") {
+                    div.classList.add("urgente");
+                }
 
-                await fetch(urlBase + "add", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json; charset=UTF-8'
-                    },
-                    body: JSON.stringify(dadosExemplo)  
-                });
+                div.innerHTML = `
+                    <p><b>Prioridade:</b> ${tarefa.prioridade}</p>
+                    <p><b>Descrição:</b> ${tarefa.descricao}</p>
+                    <p><b>Local:</b> ${tarefa.local}</p>
+                    <p><b>Recursos:</b> ${tarefa.recursosNecessarios.join(", ")}</p>
+                    <p><b>Data Limite:</b> ${tarefa.dataLimite}</p>
+                    <p><b>Matrícula:</b> ${tarefa.matricula}</p>
+                `;
 
-                atualizar(); 
+                lista.appendChild(div);
+            });
+        }
+
+        async function salvar() {
+
+            const dados = {
+                prioridade: document.getElementById("prioridade").value,
+                descricao: document.getElementById("descricao").value,
+                local: document.getElementById("local").value,
+                recursosNecessarios: document.getElementById("recursosNecessarios").value.split(",").map(r => r.trim()),
+                dataLimite: document.getElementById("dataLimite").value,
+                matricula: parseInt(document.getElementById("matricula").value)
+            };
+
+            if (!dados.prioridade || !dados.descricao || !dados.local || !dados.dataLimite || !dados.matricula) {
+                alert("Preencha todos os campos obrigatórios!");
+                return;
             }
 
-        </script>
+            const prioridadesValidas = ["Baixa", "Normal", "Urgente"];
+            if (!prioridadesValidas.includes(dados.prioridade)) {
+                alert("Prioridade inválida.");
+                return;
+            }
 
-    </body>
+            await fetch(urlBase + "add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dados)
+            });
+
+            atualizar();
+        }
+
+        atualizar();
+
+    </script>
+
+</body>
 
 </html>
