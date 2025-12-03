@@ -1,0 +1,95 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Georgia", serif;
+    background: #f4efe6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40px;
+    color: #4b3e29;
+}
+
+h2 {
+    margin-bottom: 10px;
+    color: #4b3e29;
+}
+
+.box {
+    width: 600px;
+    background: #fffaf2;
+    padding: 25px;
+    border-radius: 12px;
+    border: 2px solid #e2d5bd;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.10);
+    margin-bottom: 25px;
+}
+
+.inputField {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+label {
+    font-weight: bold;
+    color: #5b4b36;
+}
+
+input, select {
+    padding: 10px;
+    border: 1px solid #c8b79f;
+    border-radius: 6px;
+    background: #fffcf5;
+    font-size: 14px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #d6c3a3;
+    color: #4b3e29;
+    font-weight: bold;
+    border: none;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #c5b08f;
+}
+
+.tarefa {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #d0c1a7;
+    margin-bottom: 12px;
+    background: #fffdf7;
+}
+
+.urgente {
+    color: red;
+    font-weight: bold;
+    border-color: red;
+}
+
+.vazio {
+    color: #7a6a53;
+    text-align: center;
+    font-style: italic;
+}
+
+.link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #6b533b;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}

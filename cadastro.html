@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cadastrar Tarefa</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <h2>Cadastro de Tarefas</h2>
+
+    <div class="box">
+        <div class="inputField">
+
+            <label>PRIORIDADE:</label>
+            <select id="prioridade">
+                <option value="">Selecione</option>
+                <option value="Baixa">Baixa</option>
+                <option value="Normal">Normal</option>
+                <option value="Urgente">Urgente</option>
+            </select>
+
+            <label>DESCRIÇÃO:</label>
+            <input id="descricao">
+
+            <label>LOCAL:</label>
+            <input id="local">
+
+            <label>RECURSOS NECESSÁRIOS:</label>
+            <input id="recursosNecessarios">
+
+            <label>DATA LIMITE:</label>
+            <input type="datetime-local" id="dataLimite">
+
+            <label>MATRÍCULA:</label>
+            <input type="number" id="matricula">
+
+            <button onclick="salvar()">SALVAR</button>
+
+            <a href="lista.html" class="link">Ir para lista de tarefas</a>
+
+        </div>
+    </div>
+
+    <script src="js/behavior.js"></script>
+</body>
+
+</html>
