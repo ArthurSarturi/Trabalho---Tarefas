@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+    <head> 
+
+        <title> Tarefas </title>
+
+        <style>
+            .inputField {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                width: 400px;
+            }
+
+        </style>
+
+    </head>
+
+    <body> 
+        
+        <div class="mainContainer"> 
+            <div class="inputField">
+                
+                <label for="prioridade"> PRIORIDADE: </label>
+                <input id="prioridade"> </input>
+                
+                <label for="descricao"> DESCRIÇÃO: </label>
+                <input id="descricao"> </input>
+                
+                <label for="local"> LOCAL: </label>
+                <input type="number" id="local"> </input>
+                
+                <label for="recursosNecessarios"> RECURSOS NECESSARIOS: </label>
+                <input id="recursosNecessarios"> </input>
+                
+                <label for="dataLimite"> DATA LIMITE: </label>
+                <input type="date" id="dataLimite"> </input>
+                
+                <label for="matricula"> MATRICULA: </label>
+                <input type="number" id="matricula"> </input>
+
+                <button type="button" onclick="salvar()"> SALVAR </button>
+
+            </div>
+
+        </div>    
+            
+        <div class="Lista" id="Lista"> 
+            
+        </div>
+
+        <script> 
+            const urlBase = "http://26.37.2.36:5000/";
+
+            async function atualizar() {
+                const response = await fetch(urlBase);
+                const dados = await response.json();
+                            
+                const tabela = document.getElementById("Lista");
+                tabela.innerHTML = "";
+
+                dados.forEach(element => {
+                    const div = document.createElement("div");
+                    div.innerHTML = `
+                        <p><b>Prioridade:</b> ${element.prioridade}</p>
+                        <p><b>Descrição:</b> ${element.descricao}</p>
+                        <p><b>Local:</b> ${element.local}</p>
+                        <p><b>Recursos:</b> ${element.recursosNecessarios}</p>
+                        <p><b>Data Limite:</b> ${element.dataLimite}</p>
+                        <p><b>Matrícula:</b> ${element.matricula}</p>
+                        <hr>
+                    `;
+                    tabela.appendChild(div);
+                });
+            }
+
+            async function salvar() {
+                const dadosExemplo = {
+                    prioridade: document.getElementById("prioridade").value,
+                    descricao: document.getElementById("descricao").value,
+                    local: parseInt(document.getElementById("local").value),
+                    recursosNecessarios: document.getElementById("recursosNecessarios").value.split(","), 
+                    dataLimite: document.getElementById("dataLimite").value,
+                    matricula: parseInt(document.getElementById("matricula").value)
+                };
+
+                console.log(dadosExemplo);
+
+                await fetch(urlBase + "add", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    body: JSON.stringify(dadosExemplo)  
+                });
+
+                atualizar(); 
+            }
+
+        </script>
+
+    </body>
+
+</html>
